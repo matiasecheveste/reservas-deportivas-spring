@@ -1,0 +1,25 @@
+# Reservas deportivas — Matías Nicolás Echeveste Cardozo
+services:
+  api:
+    build: .
+    ports: ["8080:8080"]
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://bd:5432/reservas
+      SPRING_DATASOURCE_USERNAME: reservas
+      SPRING_DATASOURCE_PASSWORD: ${CLAVE_BD:-solo-para-desarrollo}
+    depends_on:
+      bd:
+        condition: service_healthy
+  bd:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: reservas
+      POSTGRES_USER: reservas
+      POSTGRES_PASSWORD: ${CLAVE_BD:-solo-para-desarrollo}
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "reservas"]
+      interval: 5s
+      retries: 10
+    volumes: ["datos:/var/lib/postgresql/data"]
+volumes:
+  datos:

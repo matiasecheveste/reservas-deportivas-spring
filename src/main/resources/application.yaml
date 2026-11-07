@@ -1,0 +1,24 @@
+# Reservas deportivas — Matías Nicolás Echeveste Cardozo
+spring:
+  application:
+    name: reservas-deportivas
+  datasource:
+    # Por defecto, H2 en memoria en modo PostgreSQL. En producción se define
+    # SPRING_DATASOURCE_URL / _USERNAME / _PASSWORD apuntando a PostgreSQL.
+    url: jdbc:h2:mem:reservas;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  jackson:
+    time-zone: America/Montevideo
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+springdoc:
+  swagger-ui:
+    path: /docs
