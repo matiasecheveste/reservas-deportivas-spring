@@ -94,4 +94,14 @@ class ReservaControladorTest {
         mvc.perform(get("/actuator/health")).andExpect(jsonPath("$.status").value("UP"));
         mvc.perform(get("/v3/api-docs")).andExpect(status().isOk()).andExpect(jsonPath("$.paths['/api/reservas']").exists());
     }
+
+    @Test
+    void losErroresDelFrameworkTambienSonProblemDetails() throws Exception {
+        mvc.perform(post("/api/reservas").contentType(MediaType.APPLICATION_JSON).content("{\"canchaId\": 1,"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON));
+        mvc.perform(get("/api/canchas").param("deporte", "BASQUET"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON));
+    }
 }
